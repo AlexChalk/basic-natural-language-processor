@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import wordpunct_tokenize
 import pandas as pd
 
-df = pd.read_csv('../openreg_dataset.csv')
+df = pd.read_csv('../../openreg_dataset.csv')
 
 stop_words = set(stopwords.words('english'))
 
