@@ -10,3 +10,14 @@ def test_adds_token_column():
             if (word.isalpha()) & (word.lower() not in stop_words)])
     assert df.TOKEN[0] == ['cushions', 'blankets']
     assert df.TOKEN[1] == ['creatures', 'artworks']
+
+def test_synset_names_function():
+    assert get_list_of_names(wn.synsets('world')) == ['universe',
+            'world',
+            'world',
+            'Earth',
+            'populace',
+            'world',
+            'worldly_concern',
+            'world',
+            'global']
