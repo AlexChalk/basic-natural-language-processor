@@ -3,6 +3,7 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords
 from nltk.tokenize import wordpunct_tokenize
 import pandas as pd
+import re
 
 df = pd.read_csv('../openreg_dataset.csv')
 
@@ -22,5 +23,15 @@ def combine_synset_names_into_list(token_list):
         array += list_of_names
 
     return sorted(set(array))
+def stem_the_list(list):
+    array = []
+    for item in list:
+        if re.search('[a-zA-Z]', item):
+            array.append(item)
+    return [stemmer.stem(t) for t in array]
 
-df['KEYWORDS'] = [combine_synset_names_into_list(names) for names in df.TOKEN]
+def do_everything(list):
+    list = combine_synset_names_into_list(list)
+    return stem_the_list(list)
+
+df['KEYWORD'] = [do_everything(names) for names in df.TOKEN]
