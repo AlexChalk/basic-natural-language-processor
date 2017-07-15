@@ -26,4 +26,3 @@ def test_synset_names_function():
 def test_combine_synset_names_function():
     result = [combine_synset_names_into_list(names) for names in df.TOKEN]
     assert result == [['blanket', 'cushion', 'shock_absorber'], ['animal', 'artwork', 'creature']]
-
