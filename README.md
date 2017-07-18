@@ -1,2 +1,0 @@
-# openreg
-hackathon
