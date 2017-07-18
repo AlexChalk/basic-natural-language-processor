@@ -4,34 +4,37 @@ from nltk.corpus import stopwords
 from nltk.tokenize import wordpunct_tokenize
 import pandas as pd
 import re
-
+from nltk.stem.snowball import SnowballStemmer
+stemmer = SnowballStemmer("english")
 df = pd.read_csv('../openreg_dataset.csv')
-
 stop_words = set(stopwords.words('english'))
 
-df['TOKEN'] = df.TITLE.map(lambda x: [word.lower() for word in word_tokenize(x) \
-        if (word.isalpha()) & (word.lower() not in stop_words)])
 
-def get_list_of_names(synsets):
+def add_tokens(data):
+    data['TOKEN'] = data.TITLE.map(lambda x: [word.lower() for word in word_tokenize(x) \
+            if (word.isalpha()) & (word.lower() not in stop_words)])
+            
+def get_names(synsets):
     return [synset.lemmas()[0].name() for synset in synsets]
 
-def combine_synset_names_into_list(token_list):
+def get_synonyms(token_list):
     array = []
     for word in token_list:
         synsets = wn.synsets(word)
-        list_of_names = get_list_of_names(synsets)
-        array += list_of_names
-
+        synset_names = get_names(synsets)
+        array += synset_names
     return sorted(set(array))
-def stem_the_list(list):
+
+def stem_list(list):
     array = []
     for item in list:
         if re.search('[a-zA-Z]', item):
             array.append(item)
     return [stemmer.stem(t) for t in array]
 
-def do_everything(list):
-    list = combine_synset_names_into_list(list)
-    return stem_the_list(list)
+def get_synonyms_and_stem(list):
+    list = get_synonyms(list)
+    return stem_list(list)
 
-df['KEYWORD'] = [do_everything(names) for names in df.TOKEN]
+def add_keywords(data):
+    data['KEYWORD'] = [get_synonyms_and_stem(keywords) for keywords in data.TOKEN]
